@@ -1,0 +1,68 @@
+# ==========================================
+# LLM Provider API Keys
+# ==========================================
+GROQ_API_KEY=
+OPENAI_API_KEY=
+HF_TOKEN=
+
+# ==========================================
+# Agent Configuration
+# ==========================================
+DEFAULT_LLM_PROVIDER=openai
+OPENAI_MODEL=gpt-4.1-nano
+GROQ_MODEL=llama-3.1-8b-instant
+ANTHROPIC_MODEL=claude-3-5-sonnet-20240620
+OLLAMA_MODEL=llama3.2
+OLLAMA_BASE_URL=http://localhost:11434
+MAX_ITERATIONS=10
+TIMEOUT_SECONDS=300
+
+# ==========================================
+# Langfuse Tracing
+# ==========================================
+LANGFUSE_SECRET_KEY=
+LANGFUSE_PUBLIC_KEY=
+LANGFUSE_BASE_URL=https://cloud.langfuse.com
+
+# ==========================================
+# PostgreSQL Database (Memory)
+# ==========================================
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/coding_agent
+
+# ==========================================
+# Monitoring
+# ==========================================
+ENABLE_METRICS=true
+METRICS_PORT=9090
+LOG_LEVEL=INFO
+
+# ==========================================
+# Sandboxing
+# ==========================================
+SANDBOX_ENABLED=true
+SANDBOX_TIMEOUT=30
+SANDBOX_MEMORY_LIMIT=512m
+SANDBOX_CPU_LIMIT=1.0
+SANDBOX_NETWORK_DISABLED=true
+
+# ==========================================
+# Guardrails
+# ==========================================
+ENABLE_INPUT_VALIDATION=true
+ENABLE_OUTPUT_SANITIZATION=true
+ENABLE_PII_DETECTION=true
+
+# ==========================================
+# API Gateway
+# ==========================================
+JWT_SECRET_KEY=d8e20b3456789abcdef0123456789abcdef0123456789abcdef0123456789abc
+JWT_ALGORITHM=HS256
+JWT_ACCESS_TOKEN_EXPIRE_MINUTES=30
+API_HOST=0.0.0.0
+API_PORT=8000
+
+# ==========================================
+# Security
+# ==========================================
+ENABLE_CORS=true
+CORS_ORIGINS=["http://localhost:3000","http://localhost:8000"]
