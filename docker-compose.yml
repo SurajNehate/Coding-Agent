@@ -1,0 +1,66 @@
+services:
+  # PostgreSQL - Conversation Memory
+  postgres:
+    image: postgres:16-alpine
+    container_name: coding-agent-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=coding_agent
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - coding-agent-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Qdrant - Vector Database
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: coding-agent-qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - coding-agent-network
+    # Removed healthcheck to avoid dependency issues if curl is missing in specific image versions
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:6333/readyz"]
+
+  # API Gateway
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: coding-agent-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./.env:/app/.env
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/coding_agent
+      - QDRANT_URL=http://qdrant:6333
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    networks:
+      - coding-agent-network
+    command: uvicorn src.interfaces.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  postgres_data:
+  qdrant_data:
+
+networks:
+  coding-agent-network:
+    driver: bridge
